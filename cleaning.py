@@ -1,13 +1,13 @@
 import pandas as pd
 
 
-def load_file() -> pd.DataFrame:
+def load_file(fileName: str) -> pd.DataFrame:
     """
     Loads the file and prints basic information
     :return: pandas dataframe of the data
     """
 
-    df = pd.read_csv('Files/winemag-data-130k-v2.csv')
+    df = pd.read_csv(fileName)
     print(df.head())
     print(df.columns)
     print(df.info())
@@ -29,5 +29,5 @@ def clean_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    data = load_file()
+    data = load_file('Files/winemag-data-130k-v2.csv')
     data = clean_columns(data)
