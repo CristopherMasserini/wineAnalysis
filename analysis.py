@@ -1,3 +1,4 @@
+import nltk
 import pandas as pd
 import string
 
@@ -11,28 +12,25 @@ def common_words_single_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
 
     :return: A Pandas dataframe of most common words and their frequencies for the column values.
     """
-    colValues = []
-    words = []
-    counts = []
 
     descriptions = list(df.loc[:, 'description'])
     targetCol = list(df.loc[:, col])
 
     translator = str.maketrans('', '', string.punctuation)
 
+    # Use this to group by target column and concat descriptions
+    # df['text'] = df[['name', 'text', 'month']].groupby(['name', 'month'])['text'].transform(lambda x: ','.join(x))
+    # df[['name', 'text', 'month']].drop_duplicates()
+
     for ind, value in enumerate(targetCol):
         desc = descriptions[ind].lower().translate(translator)  # Lowercase and remove punctuation
-        descWords = desc.split(' ')
+        descWords = nltk.word_tokenize(desc)
+        non_stopwords = []
         for word in descWords:
-            if word in words:
-                wordInd = words.index(word)
-                counts[wordInd] += 1
-            else:
-                colValues.append(value)
-                counts.append(1)
-                words.append(word)
+            if word not in nltk.corpus.stopwords.words("english"):
+                non_stopwords.append(word)
+        fdist = nltk.probability.FreqDist(non_stopwords)
 
-    # return wordDict
 
 
 def common_words_multiple_column(df: pd.DataFrame, cols: list) -> dict:
