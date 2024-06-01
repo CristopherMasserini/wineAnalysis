@@ -3,7 +3,7 @@ import pandas as pd
 import string
 
 
-def common_words_single_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
+def common_words_single_column(df: pd.DataFrame, col: str) -> dict:
     """
     Determines most popular words in the description, broken down by the column given
 
@@ -13,23 +13,31 @@ def common_words_single_column(df: pd.DataFrame, col: str) -> pd.DataFrame:
     :return: A Pandas dataframe of most common words and their frequencies for the column values.
     """
 
-    descriptions = list(df.loc[:, 'description'])
-    targetCol = list(df.loc[:, col])
-
     translator = str.maketrans('', '', string.punctuation)
+    stopwords = nltk.corpus.stopwords.words("english")
 
     # Use this to group by target column and concat descriptions
-    # df['text'] = df[['name', 'text', 'month']].groupby(['name', 'month'])['text'].transform(lambda x: ','.join(x))
-    # df[['name', 'text', 'month']].drop_duplicates()
+    dfNew = df[[col]]
+    dfNew['all_descriptions'] = df[[col, 'description']].groupby([col])['description'].transform(lambda x: ' '.join(x))
+    dfNew = dfNew.drop_duplicates()
+
+    descriptions = list(dfNew.loc[:, 'all_descriptions'])
+    targetCol = list(dfNew.loc[:, col])
+
+    info = {}
 
     for ind, value in enumerate(targetCol):
         desc = descriptions[ind].lower().translate(translator)  # Lowercase and remove punctuation
         descWords = nltk.word_tokenize(desc)
         non_stopwords = []
         for word in descWords:
-            if word not in nltk.corpus.stopwords.words("english"):
+            if word not in stopwords:
                 non_stopwords.append(word)
         fdist = nltk.probability.FreqDist(non_stopwords)
+
+        info[value] = fdist.most_common(20)
+
+    return info
 
 
 

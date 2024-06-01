@@ -7,4 +7,6 @@ data = pd.read_csv('Files/winemag-data-small.csv')
 
 
 def test_common_words_single_column():
-    analysis.common_words_single_column(data, 'variety')
+    infoDict = analysis.common_words_single_column(data, 'variety')
+    assert isinstance(infoDict['Merlot'], list)
+    assert len(infoDict['Merlot']) > 0
