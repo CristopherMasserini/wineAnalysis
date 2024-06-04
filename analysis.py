@@ -40,14 +40,25 @@ def common_words_single_column(df: pd.DataFrame, col: str) -> dict:
     return info
 
 
-
-def common_words_multiple_column(df: pd.DataFrame, cols: list) -> dict:
+def single_column_reduce(df: pd.DataFrame, col: str) -> dict:
     """
-    Determines most popular words in the description, broken down by the columns given.
+    Creates a dictionary of each value of the column and a list of the descriptions.
 
     :param df: Pandas dataframe containing wine information and descriptions.
-    :param cols: Columns to break down the description by. Example: ['country', 'variety'].
+    :param col: Column to break down the description by. Examples: points, price, variety.
 
-    :return: A dictionary of most common words and their frequencies.
+    :return: A dictionary of each description (in a list) for each value of col
     """
-    pass
+    descriptions = list(df.loc[:, 'description'])
+    targetCol = list(df.loc[:, col])
+
+    data = {}
+
+    for ind, value in enumerate(targetCol):
+        desc = descriptions[ind]
+        if value in data:
+            data[value].append(desc)
+        else:
+            data[value] = [desc]
+
+    return data
