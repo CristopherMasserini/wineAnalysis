@@ -1,6 +1,8 @@
 from gensim.models import Word2Vec
 import gensim
 
+from sklearn.feature_extraction.text import CountVectorizer
+
 
 def word2Vec_model(data):
     """

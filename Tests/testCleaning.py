@@ -19,3 +19,7 @@ def test_clean_columns():
     assert len(list(dfNew.description)) > 0
     assert list(dfNew.loc[:, 'variety'])[10] is not None
 
+
+def test_all():
+    test_load_file()
+    test_clean_columns()

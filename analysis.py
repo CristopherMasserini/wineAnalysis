@@ -1,6 +1,7 @@
 import nltk
 import pandas as pd
 import string
+from sklearn.feature_extraction.text import CountVectorizer
 
 
 def common_words_single_column(df: pd.DataFrame, col: str) -> dict:
@@ -62,3 +63,26 @@ def single_column_reduce(df: pd.DataFrame, col: str) -> dict:
             data[value] = [desc]
 
     return data
+
+
+def vectorize_descriptions(df: pd.DataFrame) -> object:
+    """
+    Vectorizing the descriptions to be used in a bag of words model approach.
+    :param df: Pandas dataframe containing wine descriptions.
+    :return: Vecotrized list of the vocabulary.
+    """
+
+    vectorizer = CountVectorizer()
+    translator = str.maketrans('', '', string.punctuation)
+
+    descriptions = list(df.loc[:, 'description'])
+    cleaned_descriptions = []
+
+    for description in descriptions:
+        desc = description.lower().translate(translator)
+        cleaned_descriptions.append(desc)
+
+    vectorizer.fit(cleaned_descriptions)
+    vector = vectorizer.transform(cleaned_descriptions)
+    return vector
+
