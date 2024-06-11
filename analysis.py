@@ -69,7 +69,7 @@ def vectorize_descriptions(df: pd.DataFrame) -> object:
     """
     Vectorizing the descriptions to be used in a bag of words model approach.
     :param df: Pandas dataframe containing wine descriptions.
-    :return: Vecotrized list of the vocabulary.
+    :return: Vecotrized  list of the vocabulary.
     """
 
     vectorizer = CountVectorizer()
