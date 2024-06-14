@@ -1,16 +1,21 @@
 import pandas as pd
 
 
-def load_file(fileName: str) -> pd.DataFrame:
+def load_file(fileName: str, printInfo=False) -> pd.DataFrame:
     """
     Loads the file and prints basic information
+
+    :param fileName: file name of data
+    :param printInfo: to print the data or not
     :return: pandas dataframe of the data
     """
 
     df = pd.read_csv(fileName)
-    print(df.head())
-    print(df.columns)
-    print(df.info())
+
+    if printInfo:
+        print(df.head())
+        print(df.columns)
+        print(df.info())
 
     return df
 
@@ -29,5 +34,5 @@ def clean_columns(df: pd.DataFrame) -> pd.DataFrame:
 
 
 if __name__ == '__main__':
-    data = load_file('Files/winemag-data-130k-v2.csv')
+    data = load_file('Files/winemag-data-130k-v2.csv', True)
     data = clean_columns(data)
